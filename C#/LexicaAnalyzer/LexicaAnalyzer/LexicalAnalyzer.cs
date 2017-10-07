@@ -18,7 +18,7 @@
   /// LexicalAnalyzer lexicalAnalyzer = LexicalAnalyzer.Instance
   /// </code>
   /// </remarks>
-  class LexicalAnalyzer {
+  public class LexicalAnalyzer {
 
     /// <value>Private <c>string</c> representation of the program</value>
     private string program;
@@ -41,8 +41,8 @@
     /// Gets the next token available from <paramref name="program"/>
     /// </summary>
     /// <returns>
-    /// Returns the next <c>Token</c> or <c>null</c> if there is no next token
-    /// available
+    /// Returns the next <c>Token</c> or <c>null</c> if there is no
+    /// valid next token
     /// </returns>
     public Token NextToken() { return null; }
 

@@ -31,7 +31,7 @@ namespace SmallCLexicalAnalyzer {
   /// <remarks>
   /// The <c>LexicalAnalyzer</c> can have one to many states
   /// </remarks>
-  class State {
+  public class State {
 
     /// <value>A private dictionary that represents the state transision for
     /// for this <c>State</c> with keys of type <c>char</c> and values of type
