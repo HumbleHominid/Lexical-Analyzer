@@ -42,7 +42,7 @@ namespace SmallCLexicalAnalyzer {
     public string TokenName { get; private set; }
 
     /// <summary>
-    /// Initialaizer for a  for a <c>State</c>
+    /// Initialaizer for a for a <c>State</c>
     /// </summary>
     /// <remarks>
     /// Sets <paramref name="TokenName"/> to <c>null</c>
@@ -86,7 +86,7 @@ namespace SmallCLexicalAnalyzer {
     /// Gets the destination state given a <c>char</c> <paramref name="c"/>
     /// </summary>
     /// <returns>
-    /// A destination <c>State</c>
+    /// A destination <c>State</c> or <c>null</c> if no transition is available
     /// </returns>
     /// <param name="c">A <c>char</c> as a key</param>
     public State GetDestination(char c) {
