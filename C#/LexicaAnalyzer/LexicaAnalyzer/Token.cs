@@ -24,7 +24,7 @@
     public string Name { get; private set; }
 
     /// <summary>
-    /// Initializer for a <c>Token</c> using <paramref name="lexem"/> and
+    /// Initializer for a <c>Token</c> using <paramref name="lexeme"/> and
     /// <paramref name="name"/>
     /// </summary>
     /// <param name="lexeme">A string literal</param>

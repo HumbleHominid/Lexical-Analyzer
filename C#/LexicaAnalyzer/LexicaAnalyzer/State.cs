@@ -33,7 +33,7 @@ namespace SmallCLexicalAnalyzer {
   /// </remarks>
   public class State {
 
-    /// <value>A private dictionary that represents the state transision for
+    /// <value>A private dictionary that represents the state transition for
     /// for this <c>State</c> with keys of type <c>char</c> and values of type
     /// <c>State</c></value>
     private Dictionary<char, State> transition = new Dictionary<char, State>();
@@ -42,7 +42,7 @@ namespace SmallCLexicalAnalyzer {
     public string TokenName { get; private set; }
 
     /// <summary>
-    /// Initialaizer for a for a <c>State</c>
+    /// Initializer for a for a <c>State</c>
     /// </summary>
     /// <remarks>
     /// Sets <paramref name="TokenName"/> to <c>null</c>

@@ -24,7 +24,7 @@ namespace SmallCLexicalAnalyzer {
 
           Console.WriteLine($"Lexeme: {token.Lexeme,-10} Name: {token.Name}");
 
-          userInput = Console.ReadLine();
+          userInput = "a";//Console.ReadLine();
 
           if (userInput == "q") {
             Console.WriteLine("Are you sure you want to quit? (y/n)");
@@ -36,6 +36,8 @@ namespace SmallCLexicalAnalyzer {
           }
         }
       } while (lex.HasNextToken && !stopAnalysis);
+
+      Console.ReadLine();
     }
 
     private static bool UserConfirmation() {

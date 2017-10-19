@@ -5,11 +5,11 @@ using System.Collections.Generic;
 namespace SmallCLexicalAnalyzer {
 
   /// <summary>
-  /// A <c>LexicalAnalyzer</c> that uses <c>State</c> objects to travers a
+  /// A <c>LexicalAnalyzer</c> that uses <c>State</c> objects to traverse a
   /// DFA.
   /// <list>
   /// <term>NextToken<term>
-  /// <descritpion>Gets the next token</description>
+  /// <description>Gets the next token</description>
   /// <term>LoadProgram</term>
   /// <description>Loads a new program</description>
   /// </list>
@@ -146,10 +146,18 @@ namespace SmallCLexicalAnalyzer {
 
         char nextChar = program[lineNumber][column];
 
-        state = state.GetDestination(Char.ToLower(nextChar));
+        state = state.GetDestination(nextChar);
 
         if (state != null) {
-          if (state != states[0]) {
+          if (state.TokenName == "Dead") {
+            Console.WriteLine($"Syntax error at {lineNumber + 1}:{column + 1}");
+
+            lexeme = "";
+            name = "";
+
+            state = states[0];
+          }
+          else if (state != states[0]) {
             lexeme = lexeme + nextChar;
             name = state.TokenName;
           }
@@ -163,7 +171,6 @@ namespace SmallCLexicalAnalyzer {
           if (column == 0) {
             lineNumber = lineNumber + 1;
           }
-
         }
       } while (state != null);
 
@@ -174,6 +181,18 @@ namespace SmallCLexicalAnalyzer {
       if (keywords.ContainsKey(lexeme)) {
         keywords.TryGetValue(lexeme, out name);
       }
+      else if (name == "Line Comment" || name == "Block Comment") {
+        Token? newToken = NextToken();
+
+        if (newToken == null) {
+          return null;
+        }
+
+        Token token = (Token)newToken;
+
+        lexeme = token.Lexeme;
+        name = token.Name;
+      }
 
       return new Token(lexeme, name);
     }
@@ -183,7 +202,7 @@ namespace SmallCLexicalAnalyzer {
     /// <paramref name="program"/>
     /// </summary>
     /// <returns>
-    /// A <c>bool</c> for if the load was successfull or not
+    /// A <c>bool</c> for if the load was successful or not
     /// </returns>
     /// <param name="filename">A filename as a <c>string</c></param>
     public bool LoadProgram(string filename) {
@@ -192,7 +211,7 @@ namespace SmallCLexicalAnalyzer {
       try {
         using (StreamReader sr = new StreamReader(filename)) {
           while(!sr.EndOfStream) {
-            program.Add(sr.ReadLine());
+            program.Add($"{sr.ReadLine()}\r\n");
           }
         }
 
