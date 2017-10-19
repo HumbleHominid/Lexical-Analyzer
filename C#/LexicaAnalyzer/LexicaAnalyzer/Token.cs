@@ -15,7 +15,7 @@
   /// This is what the <c>LexicalAnalyer</c> returns when it is stepping
   /// through the program
   /// </remarks>
-  public class Token {
+  public struct Token {
 
     /// <value>Gets and private sets the <c>Lexeme</c> property</value>
     public string Lexeme { get; private set; }

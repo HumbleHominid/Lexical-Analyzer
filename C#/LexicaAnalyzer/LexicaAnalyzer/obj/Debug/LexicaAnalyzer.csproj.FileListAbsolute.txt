@@ -1,0 +1,7 @@
+C:\Users\Michael Fryer\Git\Lexical-Analyzer\C#\LexicaAnalyzer\LexicaAnalyzer\obj\Debug\LexicaAnalyzer.csprojResolveAssemblyReference.cache
+C:\Users\Michael Fryer\Git\Lexical-Analyzer\C#\LexicaAnalyzer\LexicaAnalyzer\obj\Debug\LexicaAnalyzer.csproj.CoreCompileInputs.cache
+C:\Users\Michael Fryer\Git\Lexical-Analyzer\C#\LexicaAnalyzer\LexicaAnalyzer\bin\Debug\LexicaAnalyzer.exe.config
+C:\Users\Michael Fryer\Git\Lexical-Analyzer\C#\LexicaAnalyzer\LexicaAnalyzer\bin\Debug\LexicaAnalyzer.exe
+C:\Users\Michael Fryer\Git\Lexical-Analyzer\C#\LexicaAnalyzer\LexicaAnalyzer\bin\Debug\LexicaAnalyzer.pdb
+C:\Users\Michael Fryer\Git\Lexical-Analyzer\C#\LexicaAnalyzer\LexicaAnalyzer\obj\Debug\LexicaAnalyzer.exe
+C:\Users\Michael Fryer\Git\Lexical-Analyzer\C#\LexicaAnalyzer\LexicaAnalyzer\obj\Debug\LexicaAnalyzer.pdb

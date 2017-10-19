@@ -1,0 +1,8 @@
+bool,`Boolean` Keyword
+int,`Integer` Keyword
+while,`While` Keyword
+if,`If` Keyword
+else,`Else` Keyword
+return,`Return` Keyword
+float,`Float` Keyword
+main,`Main` Keyword
