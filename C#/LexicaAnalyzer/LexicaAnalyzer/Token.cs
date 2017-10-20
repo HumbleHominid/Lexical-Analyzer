@@ -3,11 +3,11 @@
   /// <summary>
   /// The <c>Token</c> struct
   /// Contains following methods:
-  /// <list>
+  /// <list type="bullet">
   /// <item>
   /// <term>Token</term>
   /// <description>Initializes a new instance of the
-  /// <see cref="Token{string, string}"> class</description>
+  /// <see cref="Token(string, string)"/> class</description>
   /// </item>
   /// </list>
   /// </summary>

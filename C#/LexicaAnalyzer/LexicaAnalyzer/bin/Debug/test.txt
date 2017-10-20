@@ -1,5 +1,0 @@
-/* */
-
-int X = -+29;
-    Y = .;
-bool Z = X==Y && true;

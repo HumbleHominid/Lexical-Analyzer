@@ -6,16 +6,16 @@ namespace SmallCLexicalAnalyzer {
   /// <summary>
   /// A <c>State</c> the <c>LexicalAnalyzer</c> can be in
   /// Contains following methods:
-  /// <list>
+  /// <list type="bullet">
   /// <item>
   /// <term>State</term>
   /// <description>Initializes a new instance of the
-  /// <see cref="State{}"> class</description>
+  /// <see cref="State()"/> class</description>
   /// </item>
   /// <item>
   /// <term>State</term>
   /// <description>Initializes a new instance of the
-  /// <see cref="State{string}"> class</description>
+  /// <see cref="State(string)"/> class</description>
   /// </item>
   /// <item>
   /// <term>AddToDictionary</term>
@@ -41,11 +41,20 @@ namespace SmallCLexicalAnalyzer {
     /// <value>Gets and private sets the <c>TokenName</c></value>
     public string TokenName { get; private set; }
 
+    /// <value>Returns if the state is an accepting state</value>
+    public bool Accepting { get => (TokenName != null &&
+                                    !Dead);
+                          }
+
+    public bool Dead {
+                        get => (TokenName == "Dead");
+                     }
+
     /// <summary>
     /// Initializer for a for a <c>State</c>
     /// </summary>
     /// <remarks>
-    /// Sets <paramref name="TokenName"/> to <c>null</c>
+    /// Sets <see name="TokenName"/> to <c>null</c>
     /// </remarks>
     public State() {
       TokenName = null;
@@ -55,7 +64,7 @@ namespace SmallCLexicalAnalyzer {
     /// Initializer for a <c>State</c>
     /// </summary>
     /// <remarks>
-    /// Sets <paramref name="TokenName"/> to <paramref name="tokenName"/>
+    /// Sets <see name="TokenName"/> to <paramref name="tokenName"/>
     /// </remarks>
     /// <param name="tokenName">A <c>string</c></param>
     public State(string tokenName) {
