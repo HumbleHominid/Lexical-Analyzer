@@ -33,8 +33,8 @@ namespace SmallCLexicalAnalyzer {
     private Dictionary<string, string> keywords =
             new Dictionary<string, string>();
 
-    /// <value>Private <c>List</c> that contains all the states</value>
-    private List<State> states = new List<State>();
+    /// <value>Private <c>Dictionary</c> that contains all the states</value>
+    private Dictionary<string, State> states = new Dictionary<string, State>();
 
     /// <value>Public <c>bool</c> for if there is a token available.</value>
     public bool HasNextToken { get => !programStream.EndOfStream; }
@@ -55,53 +55,93 @@ namespace SmallCLexicalAnalyzer {
     private LexicalAnalyzer() {
       try {
         using (StreamReader sr = new StreamReader("Lexical Analyzer Table.csv")) {
-          List<string[]> table = new List<string[]>();
+          Dictionary<string, string[]> stateDictionary =
+                                       new Dictionary<string, string[]>();
 
+          // Adds the table for lexical analyzer to stateTable
           while (!sr.EndOfStream) {
-            table.Add(sr.ReadLine().Split(','));
+            string[] splitLine = sr.ReadLine().Split(',');
+
+            if (!stateDictionary.ContainsKey(splitLine[0])) {
+              stateDictionary.Add(splitLine[0], splitLine);
+            }
           }
 
-          for (int i = 1; i < table.Count; i++) {
-            string tokenName = table[i][1];
-            State state;
+          // Creates each state and adds it to the dictionary
+          foreach (KeyValuePair<string, string[]> entry in stateDictionary) {
+            string key = entry.Key;
 
-            state = tokenName.Equals("") ? new State() : new State(tokenName);
+            if (key != "Valid Chars") {
+              State state = key.Equals("") ?
+                            new State() :
+                            new State(entry.Value[1]);
 
-            states.Add(state);
+              states.Add(key, state);
+            }
           }
 
-          for (int i = 0; i < states.Count; i++) {
-            string[] stateChangeInfo = table[i + 1];
+          // Maps the states to transition states
+          foreach (KeyValuePair<string, State> entry in states) {
+            State state = entry.Value;
+            string key = entry.Key;
+            string[] stateChangeInfo = stateDictionary[key];
 
-            for (int j = 2; j < stateChangeInfo.Length; j++) {
-              string s = table[0][j];
-              char c;
-              int stateNumber;
+            for (int i = 2; i < stateChangeInfo.Length; i++) {
+              string relatedState = stateChangeInfo[i];
 
-              if (int.TryParse(stateChangeInfo[j], out stateNumber)) {
-                c = s.Contains("0x") ?
-                    (char)Convert.ToInt32(s.Replace("0x", ""), 16) :
-                    s[0];
+              if (relatedState != null && !relatedState.Equals("")) {
+                string inputValue = stateDictionary["Valid Chars"][i];
+                char? c = inputValue.Contains("0x") ?
+                          HexTokenToChar(inputValue) :
+                          inputValue[0];
 
-                states[i].AddToDictionary(c, states[stateNumber]);
+                if (c != null) {
+                  state.AddToDictionary((char)c, states[relatedState]);
+                }
               }
             }
           }
         }
+      }
+      catch (Exception e) { }
+    }
 
-        using (StreamReader sr = new StreamReader("Keyword Table.csv")) {
-          while (!sr.EndOfStream) {
-            string[] splitLine = sr.ReadLine().Split(',');
+    /// <summary>
+    /// Converts a hex code in a given string into a character
+    /// </summary>
+    /// <returns>
+    /// A <c>char</c> that was extracted from the string or <c>null</c> if it
+    /// could not be converted
+    /// </returns>
+    private void ReadKeywords() {
+      using (StreamReader sr = new StreamReader("Keyword Table.csv")) {
+        while (!sr.EndOfStream) {
+          string[] splitLine = sr.ReadLine().Split(',');
 
-            try {
-              keywords.Add(splitLine[0], splitLine[1]);
-            }
-            catch(ArgumentException e) { }
+          try {
+            keywords.Add(splitLine[0], splitLine[1]);
           }
+          catch(ArgumentException e) { }
         }
       }
+    }
+
+    /// <summary>
+    /// Converts a hex code in a given string into a character
+    /// </summary>
+    /// <returns>
+    /// A <c>char</c> that was extracted from the string or <c>null</c> if it
+    /// could not be converted
+    /// </returns>
+    private char? HexTokenToChar(string s) {
+      try {
+        string stringHexValue = s.Replace("0x", "");
+        int hexValue = Convert.ToInt32(stringHexValue, 16);
+
+        return (char)hexValue;
+      }
       catch (Exception e) {
-        Console.WriteLine($"Table could not be read: {e.Message}");
+        return null;
       }
     }
 
@@ -114,8 +154,8 @@ namespace SmallCLexicalAnalyzer {
     /// Recursively calls itself if a comment is found
     /// </returns>
     public Token? NextToken() {
-      // states[0] is the starting state
-      State state = states[0];
+      // states["0"] is the starting state
+      State state = states["0"];
       string lexeme = "";
 
       while (state != null && HasNextToken) {
@@ -125,15 +165,15 @@ namespace SmallCLexicalAnalyzer {
 
         if (nextState != null) {
           char nextChar = (char)programStream.Read();
-          // states[1] is the dead state
+
           if (nextState.Dead) {
             return null;
           }
-          else if (nextState != states[0]) {
-            lexeme = lexeme + nextChar;
+          else if (nextState.Start) {
+            lexeme = "";
           }
           else {
-            lexeme = "";
+            lexeme = lexeme + nextChar;
           }
 
           state = nextState;
@@ -171,8 +211,6 @@ namespace SmallCLexicalAnalyzer {
         return true;
       }
       catch (Exception e) {
-        Console.WriteLine($"File could not be read: {e.Message}");
-
         return false;
       }
     }

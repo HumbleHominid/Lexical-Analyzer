@@ -43,11 +43,18 @@ namespace SmallCLexicalAnalyzer {
 
     /// <value>Returns if the state is an accepting state</value>
     public bool Accepting { get => (TokenName != null &&
-                                    !Dead);
+                                    !Dead &&
+                                    !Start);
                           }
 
+    /// <value>Returns if the state is a dead state</value>
     public bool Dead {
                         get => (TokenName == "Dead");
+                     }
+
+    /// <value>Returns if the state is a start state</value>
+    public bool Start {
+                        get => (TokenName == "Start");
                      }
 
     /// <summary>

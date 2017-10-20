@@ -30,7 +30,12 @@ namespace SmallCLexicalAnalyzer {
       }
     }
 
-    /// TODO Add documentation
+    /// <summary>
+    /// Runs the analysis of the program
+    /// </summary>
+    /// <returns>
+    /// Void
+    /// </returns>
     private static void RunAnalysis() {
       LexicalAnalyzer lex = LexicalAnalyzer.Instance;
 
@@ -69,6 +74,8 @@ namespace SmallCLexicalAnalyzer {
 
             break;
           case "h":
+            DisplayCommandsMessage();
+
             break;
         }
       }
@@ -76,7 +83,13 @@ namespace SmallCLexicalAnalyzer {
       lex.CloseProgram();
     }
 
-    /// TODO Add documentation
+    /// <summary>
+    /// Gets the users confirmation
+    /// </summary>
+    /// <returns>
+    /// A <c>bool</c> where <c>true</c> is for a positive confirmation and
+    /// <c>false</c> for a negative confirmation
+    /// </returns>
     private static bool UserConfirmation() {
       string userResponse = null;
 
@@ -91,7 +104,12 @@ namespace SmallCLexicalAnalyzer {
       return (userResponse.Equals("y"));
     }
 
-    /// TODO Add documentation
+    /// <summary>
+    /// Displays the commands message to the user
+    /// </summary>
+    /// <returns>
+    /// Void
+    /// </returns>
     private static void DisplayCommandsMessage() {
       string message = "";
 
