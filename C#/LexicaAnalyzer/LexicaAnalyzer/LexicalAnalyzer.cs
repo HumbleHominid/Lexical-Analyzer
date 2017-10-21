@@ -26,84 +26,85 @@ namespace SmallCLexicalAnalyzer {
   /// </remarks>
   public class LexicalAnalyzer {
 
-    /// <value>Private <c>StreamReader</c> of the currently open program.
-    private StreamReader programStream = null;
+    /// <value>Private <c>string</c> of the program
+    public string ProgramString { get; set; }
 
     /// <value>Private <c>Dictionary</c> of the keywords for the language</value>
     private Dictionary<string, string> keywords =
-            new Dictionary<string, string>();
+        new Dictionary<string, string>();
 
     /// <value>Private <c>Dictionary</c> that contains all the states</value>
     private Dictionary<string, State> states = new Dictionary<string, State>();
 
     /// <value>Public <c>bool</c> for if there is a token available.</value>
-    public bool HasNextToken { get => !programStream.EndOfStream; }
-
-    /// <value>Private instance of the class <c>LexicalAnalyzer</c></value>
-    /// <remarks>
-    /// This creates an instance of itself to abide by the Singleton pattern
-    /// </remarks>
-    public static LexicalAnalyzer Instance { get; private set; } =
-           new LexicalAnalyzer();
+    public bool HasNextToken {
+          get => (ProgramString.Length > 0);
+        }
 
     /// <summary>
     /// Initializer for a <c>LexicalAnalyzer</c>
     /// </summary>
-    /// <remarks>
-    /// This is private to abide by the Singleton pattern
-    /// </remarks>
-    private LexicalAnalyzer() {
+    public LexicalAnalyzer(string tableFile, string keywordsFile) {
       try {
-        using (StreamReader sr = new StreamReader("Lexical Analyzer Table.csv")) {
+        using (StreamReader sr = new StreamReader(tableFile)) {
           Dictionary<string, string[]> stateDictionary =
                                        new Dictionary<string, string[]>();
 
-          // Adds the table for lexical analyzer to stateTable
           while (!sr.EndOfStream) {
-            string[] splitLine = sr.ReadLine().Split(',');
+            string s = sr.ReadLine();
+            string[] splitLine = s.Split(',');
 
             if (!stateDictionary.ContainsKey(splitLine[0])) {
               stateDictionary.Add(splitLine[0], splitLine);
             }
           }
 
-          // Creates each state and adds it to the dictionary
-          foreach (KeyValuePair<string, string[]> entry in stateDictionary) {
-            string key = entry.Key;
+          CreateStates(stateDictionary);
 
-            if (key != "Valid Chars") {
-              State state = key.Equals("") ?
-                            new State() :
-                            new State(entry.Value[1]);
+          MapStateTransitions(stateDictionary);
 
-              states.Add(key, state);
-            }
-          }
+          ReadKeywords(keywordsFile);
+        }
+      }
+      catch (Exception e) { }
+    }
 
-          // Maps the states to transition states
-          foreach (KeyValuePair<string, State> entry in states) {
-            State state = entry.Value;
-            string key = entry.Key;
-            string[] stateChangeInfo = stateDictionary[key];
+    private void CreateStates(Dictionary<string, string[]> stateDictionary) {
+      foreach (KeyValuePair<string, string[]> entry in stateDictionary) {
+        string key = entry.Key;
 
-            for (int i = 2; i < stateChangeInfo.Length; i++) {
-              string relatedState = stateChangeInfo[i];
+        if (entry.Value[0] != "Valid Chars") {
+          State state = entry.Value[1] == "" ?
+                        new State(key) :
+                        new State(key, entry.Value[1]);
 
-              if (relatedState != null && !relatedState.Equals("")) {
-                string inputValue = stateDictionary["Valid Chars"][i];
-                char? c = inputValue.Contains("0x") ?
-                          HexTokenToChar(inputValue) :
-                          inputValue[0];
+          states.Add(key, state);
+        }
+      }
+    }
 
-                if (c != null) {
-                  state.AddToDictionary((char)c, states[relatedState]);
-                }
-              }
+    private void MapStateTransitions(Dictionary<string, string[]> stateDictionary) {
+      foreach (KeyValuePair<string, State> entry in states) {
+        State state = entry.Value;
+        string key = entry.Key;
+        string[] stateChangeInfo = stateDictionary[key];
+
+        for (int i = 2; i < stateChangeInfo.Length; i++) {
+          string relatedState = stateChangeInfo[i];
+
+          if (relatedState != "") {
+            string inputHeader = stateDictionary["Valid Chars"][i];
+
+            char? c = inputHeader.Contains("0x") ?
+                HexTokenToChar(inputHeader) :
+                inputHeader[0];
+
+            if (c != null && states.ContainsKey(relatedState)) {
+              state.AddToDictionary((char)c, states[relatedState]);
             }
           }
         }
       }
-      catch (Exception e) { }
     }
 
     /// <summary>
@@ -113,8 +114,8 @@ namespace SmallCLexicalAnalyzer {
     /// A <c>char</c> that was extracted from the string or <c>null</c> if it
     /// could not be converted
     /// </returns>
-    private void ReadKeywords() {
-      using (StreamReader sr = new StreamReader("Keyword Table.csv")) {
+    private void ReadKeywords(string keywordsFile) {
+      using (StreamReader sr = new StreamReader(keywordsFile)) {
         while (!sr.EndOfStream) {
           string[] splitLine = sr.ReadLine().Split(',');
 
@@ -155,83 +156,48 @@ namespace SmallCLexicalAnalyzer {
     /// </returns>
     public Token? NextToken() {
       // states["0"] is the starting state
-      State state = states["0"];
+      State startState = states["0"];
+      State state = startState;
+      State nextState;
       string lexeme = "";
+      char nextChar;
 
-      while (state != null && HasNextToken) {
-        State nextState = null;
+      while (!state.Dead && HasNextToken) {
+        if (state == startState) {
+          lexeme = "";
+        }
 
-        nextState = state.GetDestination((char)programStream.Peek());
+        nextChar = ProgramString[0];
+        nextState = state.GetDestination(nextChar);
 
-        if (nextState != null) {
-          char nextChar = (char)programStream.Read();
-
-          if (nextState.Dead) {
-            return null;
-          }
-          else if (nextState.Start) {
-            lexeme = "";
-          }
-          else {
-            lexeme = lexeme + nextChar;
-          }
-
+        if (nextState == null && state.Accepting) {
+          return CreateGoodToken(lexeme, state.AcceptedName);
+        }
+        else if (nextState != null) {
+          lexeme = lexeme + nextChar;
           state = nextState;
-        }
-        else {
-          if (state.Accepting) {
-            if (state.TokenName.Equals("Line Comment") ||
-                state.TokenName.Equals("Block Comment")) {
-              return NextToken();
-            }
-            else {
-              return new Token(lexeme, state.TokenName);
-            }
-          }
-          else {
-            return null;
-          }
+          ProgramString = ProgramString.Remove(0, 1);
         }
       }
 
-      return null;
-    }
-
-    /// <summary>
-    /// Opens a program from <paramref name="filename"/>
-    /// </summary>
-    /// <returns>
-    /// A <c>bool</c> for if the open was successful or not
-    /// </returns>
-    /// <param name="filename">A filename as a <c>string</c></param>
-    public bool OpenProgram(string filename) {
-      try {
-        programStream = new StreamReader(filename);
-
-        return true;
+      if (state.Accepting) {
+        return CreateGoodToken(lexeme, state.AcceptedName);
       }
-      catch (Exception e) {
-        return false;
+      else if (state == startState) {
+        return null;
+      }
+      else {
+        return new Token(lexeme);
       }
     }
 
-    /// <summary>
-    /// Closes previous StreamReader stored in <see name="programStream"/> if
-    /// it exists and sets it to null
-    /// </summary>
-    /// <returns>
-    /// A <c>bool</c> for if the StreamReader was closed or not
-    /// </returns>
-    public bool CloseProgram() {
-      if (programStream != null) {
-        programStream.Close();
-
-        programStream = null;
-
-        return true;
+    private Token CreateGoodToken(string lexeme, string name) {
+      if (name == "Identifier" &&  keywords.ContainsKey(lexeme)) {
+        return new Token(lexeme, keywords[lexeme]);
       }
-
-      return false;
+      else {
+        return new Token(lexeme, name);
+      }
     }
   }
 }

@@ -8,6 +8,9 @@
   /// <term>Token</term>
   /// <description>Initializes a new instance of the
   /// <see cref="Token(string, string)"/> class</description>
+  /// <term>Token</term>
+  /// <description>Initializes a new instance of the
+  /// <see cref="Token(string)"/> class</description>
   /// </item>
   /// </list>
   /// </summary>
@@ -22,6 +25,19 @@
 
     /// <value>Gets and private sets the <c>Name</c> property</value>
     public string Name { get; private set; }
+
+    /// <value>Computed property for if the token is bad</value>
+    public bool Bad { get => (Name == null); }
+
+    /// <summary>
+    /// Initializer for a <c>Token</c> using <paramref name="lexeme"/> where
+    /// <see cref="Name"/> is null
+    /// </summary>
+    /// <param name="lexeme">A string literal</param>
+    public Token(string lexeme) {
+      Lexeme = lexeme;
+      Name = null;
+    }
 
     /// <summary>
     /// Initializer for a <c>Token</c> using <paramref name="lexeme"/> and

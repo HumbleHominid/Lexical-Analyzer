@@ -34,48 +34,43 @@ namespace SmallCLexicalAnalyzer {
   public class State {
 
     /// <value>A private dictionary that represents the state transition for
-    /// for this <c>State</c> with keys of type <c>char</c> and values of type
+    /// for this <c>State</c> with keys of type <c>char</c> and values of type4
     /// <c>State</c></value>
     private Dictionary<char, State> transition = new Dictionary<char, State>();
 
-    /// <value>Gets and private sets the <c>TokenName</c></value>
-    public string TokenName { get; private set; }
+    /// <value>Gets and private sets the <c>AcceptedName</c></value>
+    public string AcceptedName { get; private set; }
+
+    /// <value>Gets and private sets the <c>Name</c></value>
+    public string Name { get; private set; }
 
     /// <value>Returns if the state is an accepting state</value>
-    public bool Accepting { get => (TokenName != null &&
-                                    !Dead &&
-                                    !Start);
-                          }
+    public bool Accepting { get => (AcceptedName != null); }
 
     /// <value>Returns if the state is a dead state</value>
-    public bool Dead {
-                        get => (TokenName == "Dead");
-                     }
-
-    /// <value>Returns if the state is a start state</value>
-    public bool Start {
-                        get => (TokenName == "Start");
-                     }
+    public bool Dead { get => (transition.Count < 1); }
 
     /// <summary>
     /// Initializer for a for a <c>State</c>
     /// </summary>
     /// <remarks>
-    /// Sets <see name="TokenName"/> to <c>null</c>
+    /// Sets <see name="AcceptedName"/> to <c>null</c>
     /// </remarks>
-    public State() {
-      TokenName = null;
+    public State(string name) {
+      Name = name;
+      AcceptedName = null;
     }
 
     /// <summary>
     /// Initializer for a <c>State</c>
     /// </summary>
     /// <remarks>
-    /// Sets <see name="TokenName"/> to <paramref name="tokenName"/>
+    /// Sets <see name="AcceptedName"/> to <paramref name="acceptedName"/>
     /// </remarks>
-    /// <param name="tokenName">A <c>string</c></param>
-    public State(string tokenName) {
-      TokenName = tokenName;
+    /// <param name="acceptedName">A <c>string</c></param>
+    public State(string name, string acceptedName) {
+      Name = name;
+      AcceptedName = acceptedName;
     }
 
     /// <summary>

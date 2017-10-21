@@ -1,0 +1,260 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LexicaAnalyzer</name>
+    </assembly>
+    <members>
+        <member name="T:SmallCLexicalAnalyzer.LexicalAnalyzer">
+            <summary>
+            A <c>LexicalAnalyzer</c> that uses <c>State</c> objects to traverse a
+            DFA.
+            <list type="bullet">
+            <term>NextToken</term>
+            <description>Gets the next token</description>
+            <term>OpenProgram</term>
+            <description>Opens a new program</description>
+            <term>CloseProgram</term>
+            <description>Closes the currently open program</description>
+            </list>
+            </summary>
+            <remarks>
+            The <c>LexicalAnalyzer</c> class makes use of the Singleton design pattern
+            so there will only ever be one instance of a <c>LexicalAnalyzer</c>. To
+            access the methods use the following:
+            <code>
+            LexicalAnalyzer lexicalAnalyzer = LexicalAnalyzer.Instance
+            </code>
+            </remarks>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:SmallCLexicalAnalyzer.LexicalAnalyzer.ProgramString" -->
+        <member name="F:SmallCLexicalAnalyzer.LexicalAnalyzer.keywords">
+            <value>Private <c>Dictionary</c> of the keywords for the language</value>
+        </member>
+        <member name="F:SmallCLexicalAnalyzer.LexicalAnalyzer.states">
+            <value>Private <c>Dictionary</c> that contains all the states</value>
+        </member>
+        <member name="P:SmallCLexicalAnalyzer.LexicalAnalyzer.HasNextToken">
+            <value>Public <c>bool</c> for if there is a token available.</value>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.LexicalAnalyzer.#ctor(System.String,System.String)">
+            <summary>
+            Initializer for a <c>LexicalAnalyzer</c>
+            </summary>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.LexicalAnalyzer.ReadKeywords(System.String)">
+            <summary>
+            Converts a hex code in a given string into a character
+            </summary>
+            <returns>
+            A <c>char</c> that was extracted from the string or <c>null</c> if it
+            could not be converted
+            </returns>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.LexicalAnalyzer.HexTokenToChar(System.String)">
+            <summary>
+            Converts a hex code in a given string into a character
+            </summary>
+            <returns>
+            A <c>char</c> that was extracted from the string or <c>null</c> if it
+            could not be converted
+            </returns>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.LexicalAnalyzer.NextToken">
+            <summary>
+            Gets the next token available from <see name="programStream"/>
+            </summary>
+            <returns>
+            Returns the next <c>Token</c> or <c>null</c> if there is no
+            valid next token
+            Recursively calls itself if a comment is found
+            </returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "F:SmallCLexicalAnalyzer.PreProcessor.programStream" -->
+        <member name="F:SmallCLexicalAnalyzer.PreProcessor.states">
+            <value>Private <c>Dictionary</c> that contains all the states</value>
+        </member>
+        <member name="P:SmallCLexicalAnalyzer.PreProcessor.HasNextToken">
+            <value>Public <c>bool</c> for if there is a token available.</value>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.PreProcessor.OpenProgram(System.String)">
+            <summary>
+            Opens a program from <paramref name="filename"/>
+            </summary>
+            <returns>
+            A <c>bool</c> for if the open was successful or not
+            </returns>
+            <param name="filename">A filename as a <c>string</c></param>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.PreProcessor.CloseProgram">
+            <summary>
+            Closes previous StreamReader stored in <see name="programStream"/> if
+            it exists and sets it to null
+            </summary>
+            <returns>
+            A <c>bool</c> for if the StreamReader was closed or not
+            </returns>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.PreProcessor.HexTokenToChar(System.String)">
+            <summary>
+            Converts a hex code in a given string into a character
+            </summary>
+            <returns>
+            A <c>char</c> that was extracted from the string or <c>null</c> if it
+            could not be converted
+            </returns>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.Program.RunAnalysis(SmallCLexicalAnalyzer.LexicalAnalyzer)">
+            <summary>
+            Runs the analysis of the program
+            </summary>
+            <returns>
+            Void
+            </returns>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.Program.UserConfirmation">
+            <summary>
+            Gets the users confirmation
+            </summary>
+            <returns>
+            A <c>bool</c> where <c>true</c> is for a positive confirmation and
+            <c>false</c> for a negative confirmation
+            </returns>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.Program.DisplayCommandsMessage">
+            <summary>
+            Displays the commands message to the user
+            </summary>
+            <returns>
+            Void
+            </returns>
+        </member>
+        <member name="T:SmallCLexicalAnalyzer.State">
+            <summary>
+            A <c>State</c> the <c>LexicalAnalyzer</c> can be in
+            Contains following methods:
+            <list type="bullet">
+            <item>
+            <term>State</term>
+            <description>Initializes a new instance of the
+            <see cref="!:State()"/> class</description>
+            </item>
+            <item>
+            <term>State</term>
+            <description>Initializes a new instance of the
+            <see cref="M:SmallCLexicalAnalyzer.State.#ctor(System.String)"/> class</description>
+            </item>
+            <item>
+            <term>AddToDictionary</term>
+            <description>Adds a key/value pair to the dictionary</description>
+            </item>
+            <item>
+            <term>GetDestination</term>
+            <description>Gets the destination state for a given <c>char</c>
+            </description>
+            </item>
+            </list>
+            </summary>
+            <remarks>
+            The <c>LexicalAnalyzer</c> can have one to many states
+            </remarks>
+        </member>
+        <member name="F:SmallCLexicalAnalyzer.State.transition">
+            <value>A private dictionary that represents the state transition for
+            for this <c>State</c> with keys of type <c>char</c> and values of type4
+            <c>State</c></value>
+        </member>
+        <member name="P:SmallCLexicalAnalyzer.State.AcceptedName">
+            <value>Gets and private sets the <c>AcceptedName</c></value>
+        </member>
+        <member name="P:SmallCLexicalAnalyzer.State.Name">
+            <value>Gets and private sets the <c>Name</c></value>
+        </member>
+        <member name="P:SmallCLexicalAnalyzer.State.Accepting">
+            <value>Returns if the state is an accepting state</value>
+        </member>
+        <member name="P:SmallCLexicalAnalyzer.State.Dead">
+            <value>Returns if the state is a dead state</value>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.State.#ctor(System.String)">
+            <summary>
+            Initializer for a for a <c>State</c>
+            </summary>
+            <remarks>
+            Sets <see name="AcceptedName"/> to <c>null</c>
+            </remarks>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.State.#ctor(System.String,System.String)">
+            <summary>
+            Initializer for a <c>State</c>
+            </summary>
+            <remarks>
+            Sets <see name="AcceptedName"/> to <paramref name="acceptedName"/>
+            </remarks>
+            <param name="acceptedName">A <c>string</c></param>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.State.AddToDictionary(System.Char,SmallCLexicalAnalyzer.State)">
+            <summary>
+            Adds the value <paramref name="state"/> to the dictionary with key
+            <paramref name="c"/>
+            </summary>
+            <returns>
+            A <c>bool</c> if the add was successful or not
+            </returns>
+            <param name="c">A <c>char</c> as the key</param>
+            <param name="state">A <c>State</c> as the value</param>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.State.GetDestination(System.Char)">
+            <summary>
+            Gets the destination state given a <c>char</c> <paramref name="c"/>
+            </summary>
+            <returns>
+            A destination <c>State</c> or <c>null</c> if no transition is available
+            </returns>
+            <param name="c">A <c>char</c> as a key</param>
+        </member>
+        <member name="T:SmallCLexicalAnalyzer.Token">
+            <summary>
+            The <c>Token</c> struct
+            Contains following methods:
+            <list type="bullet">
+            <item>
+            <term>Token</term>
+            <description>Initializes a new instance of the
+            <see cref="M:SmallCLexicalAnalyzer.Token.#ctor(System.String,System.String)"/> class</description>
+            <term>Token</term>
+            <description>Initializes a new instance of the
+            <see cref="M:SmallCLexicalAnalyzer.Token.#ctor(System.String)"/> class</description>
+            </item>
+            </list>
+            </summary>
+            <remarks>
+            This is what the <c>LexicalAnalyer</c> returns when it is stepping
+            through the program
+            </remarks>
+        </member>
+        <member name="P:SmallCLexicalAnalyzer.Token.Lexeme">
+            <value>Gets and private sets the <c>Lexeme</c> property</value>
+        </member>
+        <member name="P:SmallCLexicalAnalyzer.Token.Name">
+            <value>Gets and private sets the <c>Name</c> property</value>
+        </member>
+        <member name="P:SmallCLexicalAnalyzer.Token.Bad">
+            <value>Computed property for if the token is bad</value>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.Token.#ctor(System.String)">
+            <summary>
+            Initializer for a <c>Token</c> using <paramref name="lexeme"/> where
+            <see cref="P:SmallCLexicalAnalyzer.Token.Name"/> is null
+            </summary>
+            <param name="lexeme">A string literal</param>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.Token.#ctor(System.String,System.String)">
+            <summary>
+            Initializer for a <c>Token</c> using <paramref name="lexeme"/> and
+            <paramref name="name"/>
+            </summary>
+            <param name="lexeme">A string literal</param>
+            <param name="name">A string literal</param>
+        </member>
+    </members>
+</doc>

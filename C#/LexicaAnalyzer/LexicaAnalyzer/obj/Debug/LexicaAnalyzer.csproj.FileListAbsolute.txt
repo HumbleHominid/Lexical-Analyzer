@@ -12,3 +12,4 @@ C:\Users\micha\GitHub\Lexical-Analyzer\C#\LexicaAnalyzer\LexicaAnalyzer\obj\Debu
 C:\Users\micha\GitHub\Lexical-Analyzer\C#\LexicaAnalyzer\LexicaAnalyzer\obj\Debug\LexicaAnalyzer.csproj.CoreCompileInputs.cache
 C:\Users\micha\GitHub\Lexical-Analyzer\C#\LexicaAnalyzer\LexicaAnalyzer\obj\Debug\LexicaAnalyzer.exe
 C:\Users\micha\GitHub\Lexical-Analyzer\C#\LexicaAnalyzer\LexicaAnalyzer\obj\Debug\LexicaAnalyzer.pdb
+C:\Users\Michael Fryer\Git\Lexical-Analyzer\C#\LexicaAnalyzer\LexicaAnalyzer\bin\Debug\LexicaAnalyzer.xml
