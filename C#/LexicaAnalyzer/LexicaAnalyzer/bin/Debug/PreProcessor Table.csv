@@ -1,11 +1,11 @@
 Valid Chars,,*,/,0x0d,0x0a,(,),{,}
 Start,Add,,A,,,,,,
-Dead,Toss,Dead,Dead,Dead,Dead,Dead,Dead,Dead,Dead
+Dead,Toss,,,,,,,,
 Line Comment,Toss,,,,,,,,
 Block Comment,Toss,,,,,,,,
-Curly Line Comment,Curly,,,,,,,,
-Curly Block Comment,Curly,,,,,,,,
-A,,B,D,Start,Start,Start,Start,Start,Start
+Curly Line Comment,Brace,,,,,,,,
+Curly Block Comment,Brace,,,,,,,,
+A,,B,D,,,,,,
 B,,C,B,B,B,F,F,F,F
 C,,B,Block Comment,B,B,Dead,Dead,Dead,Dead
 D,,D,D,E,Dead,H,H,H,H
@@ -13,4 +13,4 @@ E,,Dead,Dead,Dead,Line Comment,Dead,Dead,Dead,Dead
 F,,G,F,F,F,F,F,F,F
 G,,F,Curly Block Comment,F,F,F,F,F,F
 H,,H,H,I,Dead,H,H,H,H
-I,,Dead,Dead,Dead,Curly Bro Comment,Dead,Dead,Dead,Dead
+I,,Dead,Dead,Dead,Curly Line Comment,Dead,Dead,Dead,Dead

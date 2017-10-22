@@ -1,9 +1,5 @@
 ﻿using System;
-/*
-Program.cs - Driver
-Preprocessor - pre processor things
-Lex - Lexical things
-*/
+
 namespace SmallCLexicalAnalyzer {
   class Program {
     static void Main(string[] args) {
@@ -32,10 +28,27 @@ namespace SmallCLexicalAnalyzer {
         } while (!prePro.OpenProgram(programPath));
 
         if (runAnalysis) {
-          string programString = prePro.Process();
+          PreProcessorResponse res = prePro.Process();
+
           prePro.CloseProgram();
 
-          LexAna.ProgramString = programString;
+          if (res.Warnings.Count > 0) {
+            Console.WriteLine("Warnings:");
+
+            res.Warnings.ForEach(delegate(Token token) {
+              Console.WriteLine($"Lexeme: {Conversions.ToLiteral(token.Lexeme),-15}Name: {token.Name,0}");
+            });
+          }
+
+          if (res.Errors.Count > 0) {
+            Console.WriteLine("Errors:");
+
+            res.Errors.ForEach(delegate(Token token) {
+              Console.WriteLine($"Lexeme: {Conversions.ToLiteral(token.Lexeme),-15}");
+            });
+          }
+
+          LexAna.SetProgramString(res.Program);
           RunAnalysis(LexAna);
         }
       }

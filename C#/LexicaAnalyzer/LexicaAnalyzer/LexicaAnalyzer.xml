@@ -4,6 +4,24 @@
         <name>LexicaAnalyzer</name>
     </assembly>
     <members>
+        <member name="M:SmallCLexicalAnalyzer.Conversions.HexTokenToChar(System.String)">
+            <summary>
+            Converts a hex code in a given string into a character
+            </summary>
+            <returns>
+            A <c>char</c> that was extracted from the string or <c>null</c> if it
+            could not be converted
+            </returns>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.Conversions.ToLiteral(System.String)">
+            <summary>
+            Converts input string to literal
+            </summary>
+            <returns>
+            string
+            </returns>
+            <param name="input">The input string to convert</param>
+        </member>
         <member name="T:SmallCLexicalAnalyzer.LexicalAnalyzer">
             <summary>
             A <c>LexicalAnalyzer</c> that uses <c>State</c> objects to traverse a
@@ -26,12 +44,11 @@
             </code>
             </remarks>
         </member>
-        <!-- Badly formed XML comment ignored for member "P:SmallCLexicalAnalyzer.LexicalAnalyzer.ProgramString" -->
+        <member name="F:SmallCLexicalAnalyzer.LexicalAnalyzer._ProgramString">
+            <value>Private <c>string</c> of the program</value>
+        </member>
         <member name="F:SmallCLexicalAnalyzer.LexicalAnalyzer.keywords">
             <value>Private <c>Dictionary</c> of the keywords for the language</value>
-        </member>
-        <member name="F:SmallCLexicalAnalyzer.LexicalAnalyzer.states">
-            <value>Private <c>Dictionary</c> that contains all the states</value>
         </member>
         <member name="P:SmallCLexicalAnalyzer.LexicalAnalyzer.HasNextToken">
             <value>Public <c>bool</c> for if there is a token available.</value>
@@ -40,19 +57,15 @@
             <summary>
             Initializer for a <c>LexicalAnalyzer</c>
             </summary>
+            <param name="tableFile">String of the table file to read</param>
+            <param name="keywordsFile">String of the keywords file to read</param>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.LexicalAnalyzer.SetProgramString(System.String)">
+            <value>Public setter for <see name="_ProgramString"/></value>
         </member>
         <member name="M:SmallCLexicalAnalyzer.LexicalAnalyzer.ReadKeywords(System.String)">
             <summary>
-            Converts a hex code in a given string into a character
-            </summary>
-            <returns>
-            A <c>char</c> that was extracted from the string or <c>null</c> if it
-            could not be converted
-            </returns>
-        </member>
-        <member name="M:SmallCLexicalAnalyzer.LexicalAnalyzer.HexTokenToChar(System.String)">
-            <summary>
-            Converts a hex code in a given string into a character
+            Reads in all the keywords and adds them to <see name="keywords"/>
             </summary>
             <returns>
             A <c>char</c> that was extracted from the string or <c>null</c> if it
@@ -68,6 +81,17 @@
             valid next token
             Recursively calls itself if a comment is found
             </returns>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.LexicalAnalyzer.CreateGoodToken(System.String,System.String)">
+            <summary>
+            Creates a good token by replacing identifiers that are keywords with
+            their correct name
+            </summary>
+            <returns>
+            The new good <c>Token</c>
+            </returns>
+            <param name="lexeme">The token's lexeme</param>
+            <param name="name">The name of the token</param>
         </member>
         <!-- Badly formed XML comment ignored for member "F:SmallCLexicalAnalyzer.PreProcessor.programStream" -->
         <member name="F:SmallCLexicalAnalyzer.PreProcessor.states">
@@ -92,15 +116,6 @@
             </summary>
             <returns>
             A <c>bool</c> for if the StreamReader was closed or not
-            </returns>
-        </member>
-        <member name="M:SmallCLexicalAnalyzer.PreProcessor.HexTokenToChar(System.String)">
-            <summary>
-            Converts a hex code in a given string into a character
-            </summary>
-            <returns>
-            A <c>char</c> that was extracted from the string or <c>null</c> if it
-            could not be converted
             </returns>
         </member>
         <member name="M:SmallCLexicalAnalyzer.Program.RunAnalysis(SmallCLexicalAnalyzer.LexicalAnalyzer)">
@@ -211,6 +226,20 @@
             A destination <c>State</c> or <c>null</c> if no transition is available
             </returns>
             <param name="c">A <c>char</c> as a key</param>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.StateMachine.CreateStates(System.Collections.Generic.Dictionary{System.String,System.String[]})">
+            <summary>
+            Populates the state dictionary <see name="States"/> with the data read
+            from <paramref name="rawStateData"/>
+            </summary>
+            <param name="rawStateData">Dictionary of raw state data</param>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.StateMachine.MapStateTransitions(System.Collections.Generic.Dictionary{System.String,System.String[]})">
+            <summary>
+            Maps all the transitions for <see name="States"/> with the data read
+            from <paramref name="rawStateData"/>
+            </summary>
+            <param name="rawStateData">Dictionary of raw state data</param>
         </member>
         <member name="T:SmallCLexicalAnalyzer.Token">
             <summary>

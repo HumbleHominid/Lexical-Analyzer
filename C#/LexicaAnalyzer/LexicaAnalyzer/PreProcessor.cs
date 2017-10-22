@@ -3,6 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 
 namespace SmallCLexicalAnalyzer {
+  public struct PreProcessorResponse {
+    public string Program { get; private set; }
+
+    public List<Token> Warnings { get; private set; }
+
+    public List<Token> Errors { get; private set; }
+
+    public PreProcessorResponse(string program,
+        List<Token> warnings, List<Token>  errors) {
+      Program = program;
+      Warnings = warnings;
+      Errors = errors;
+    }
+  }
+
   class PreProcessor {
     /// <value>Private <c>StreamReader</c> of the currently open program.
     private StreamReader programStream = null;
@@ -10,77 +25,24 @@ namespace SmallCLexicalAnalyzer {
     /// <value>Private <c>Dictionary</c> that contains all the states</value>
     private Dictionary<string, State> states = new Dictionary<string, State>();
 
+    private StateMachine stateMachine;
+
     /// <value>Public <c>bool</c> for if there is a token available.</value>
     public bool HasNextToken {
         get => programStream != null &&
                 !programStream.EndOfStream;
-       }
-
-    public PreProcessor(string table) {
-      try {
-        using (StreamReader sr = new StreamReader(table)) {
-          Dictionary<string, string[]> stateDictionary =
-                                       new Dictionary<string, string[]>();
-
-          while (!sr.EndOfStream) {
-            string s = sr.ReadLine();
-            string[] splitLine = s.Split(',');
-
-            if (!stateDictionary.ContainsKey(splitLine[0])) {
-              stateDictionary.Add(splitLine[0], splitLine);
-            }
-          }
-
-          CreateStates(stateDictionary);
-
-          MapStateTransitions(stateDictionary);
         }
-      }
-      catch (Exception e) { }
+
+    public PreProcessor(string stateTable) {
+      stateMachine = new StateMachine(stateTable);
     }
 
-    private void CreateStates(Dictionary<string, string[]> stateDictionary) {
-      foreach (KeyValuePair<string, string[]> entry in stateDictionary) {
-        string key = entry.Key;
-
-        if (entry.Value[0] != "Valid Chars") {
-          State state = entry.Value[1] == "" ?
-                        new State(key) :
-                        new State(key, entry.Value[1]);
-
-          states.Add(key, state);
-        }
-      }
-    }
-
-    private void MapStateTransitions(Dictionary<string, string[]> stateDictionary) {
-      foreach (KeyValuePair<string, State> entry in states) {
-        State state = entry.Value;
-        string key = entry.Key;
-        string[] stateChangeInfo = stateDictionary[key];
-
-        for (int i = 2; i < stateChangeInfo.Length; i++) {
-          string relatedState = stateChangeInfo[i];
-
-          if (relatedState != "") {
-            string inputHeader = stateDictionary["Valid Chars"][i];
-
-            char? c = inputHeader.Contains("0x") ?
-                HexTokenToChar(inputHeader) :
-                inputHeader[0];
-
-            if (c != null && states.ContainsKey(relatedState)) {
-              state.AddToDictionary((char)c, states[relatedState]);
-            }
-          }
-        }
-      }
-    }
-
-    public string Process() {
+    public PreProcessorResponse Process() {
       string output = "";
-      State startState = states["Start"];
+      State startState = stateMachine.States["Start"];
       State state = startState;
+      List<Token> warnings = new List<Token>();
+      List<Token> errors = new List<Token>();
 
       while (HasNextToken) {
         Token token = NextToken();
@@ -91,23 +53,22 @@ namespace SmallCLexicalAnalyzer {
               output = output + token.Lexeme;
 
               break;
-            case "Curly":
-              // Raise warning
-
-              break;
-            case "Toss":
-              // Raise Err
+            case "Brace":
+              warnings.Add(token);
 
               break;
           }
         }
+        else {
+          errors.Add(token);
+        }
       }
 
-      return output;
+      return new PreProcessorResponse(output, warnings, errors);
     }
 
     private Token NextToken() {
-      State startState = states["Start"];
+      State startState = stateMachine.States["Start"];
       State state = startState;
       string lexeme = "";
 
@@ -163,25 +124,6 @@ namespace SmallCLexicalAnalyzer {
       }
 
       return false;
-    }
-
-    /// <summary>
-    /// Converts a hex code in a given string into a character
-    /// </summary>
-    /// <returns>
-    /// A <c>char</c> that was extracted from the string or <c>null</c> if it
-    /// could not be converted
-    /// </returns>
-    private char? HexTokenToChar(string s) {
-      try {
-        string stringHexValue = s.Replace("0x", "");
-        int hexValue = Convert.ToInt32(stringHexValue, 16);
-
-        return (char)hexValue;
-      }
-      catch (Exception e) {
-        return null;
-      }
     }
   }
 }
