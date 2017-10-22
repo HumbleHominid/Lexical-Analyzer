@@ -6,18 +6,14 @@
   /// <list type="bullet">
   /// <item>
   /// <term>Token</term>
-  /// <description>Initializes a new instance of the
-  /// <see cref="Token(string, string)"/> class</description>
-  /// <term>Token</term>
-  /// <description>Initializes a new instance of the
+  /// <description>Constructs a new instance of the
   /// <see cref="Token(string)"/> class</description>
+  /// <term>Token/term>
+  /// <description>Constructs a new instance of the
+  /// <see cref="Token(string, string)"/> class</description>
   /// </item>
   /// </list>
   /// </summary>
-  /// <remarks>
-  /// This is what the <c>LexicalAnalyer</c> returns when it is stepping
-  /// through the program
-  /// </remarks>
   public struct Token {
 
     /// <value>Gets and private sets the <c>Lexeme</c> property</value>
@@ -30,7 +26,7 @@
     public bool Bad { get => (Name == null); }
 
     /// <summary>
-    /// Initializer for a <c>Token</c> using <paramref name="lexeme"/> where
+    /// Constructor for a <c>Token</c> using <paramref name="lexeme"/> where
     /// <see cref="Name"/> is null
     /// </summary>
     /// <param name="lexeme">A string literal</param>
@@ -40,7 +36,7 @@
     }
 
     /// <summary>
-    /// Initializer for a <c>Token</c> using <paramref name="lexeme"/> and
+    /// Constructor for a <c>Token</c> using <paramref name="lexeme"/> and
     /// <paramref name="name"/>
     /// </summary>
     /// <param name="lexeme">A string literal</param>

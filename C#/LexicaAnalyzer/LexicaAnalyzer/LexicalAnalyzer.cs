@@ -5,39 +5,31 @@ using System.Collections.Generic;
 namespace SmallCLexicalAnalyzer {
 
   /// <summary>
-  /// A <c>LexicalAnalyzer</c> that uses <c>State</c> objects to traverse a
-  /// DFA.
+  /// A <c>LexicalAnalyzer</c> that uses a <c>StateMachine</c> to traverse a
+  /// DFA
   /// <list type="bullet">
+  /// <term>LexicalAnlyzer</term>
+  /// <description>Initializes a new instance of the
+  /// <see cref="LexicalAnalyzer(string, string"/></description>
   /// <term>NextToken</term>
   /// <description>Gets the next token</description>
-  /// <term>OpenProgram</term>
-  /// <description>Opens a new program</description>
-  /// <term>CloseProgram</term>
-  /// <description>Closes the currently open program</description>
   /// </list>
   /// </summary>
-  /// <remarks>
-  /// The <c>LexicalAnalyzer</c> class makes use of the Singleton design pattern
-  /// so there will only ever be one instance of a <c>LexicalAnalyzer</c>. To
-  /// access the methods use the following:
-  /// <code>
-  /// LexicalAnalyzer lexicalAnalyzer = LexicalAnalyzer.Instance
-  /// </code>
-  /// </remarks>
   public class LexicalAnalyzer {
 
     /// <value>Private <c>string</c> of the program</value>
-    private string _ProgramString;
+    public string ProgramString { private get; set; }
 
     /// <value>Private <c>Dictionary</c> of the keywords for the language</value>
     private Dictionary<string, string> keywords =
         new Dictionary<string, string>();
 
+    /// <value>Private <c>StateMachine</c> for the <c>LexicalAnalyzer</c></value>
     private StateMachine stateMachine;
 
     /// <value>Public <c>bool</c> for if there is a token available.</value>
     public bool HasNextToken {
-          get => (_ProgramString.Length > 0);
+          get => (ProgramString.Length > 0);
         }
 
     /// <summary>
@@ -51,18 +43,9 @@ namespace SmallCLexicalAnalyzer {
       ReadKeywords(keywordsFile);
     }
 
-    /// <value>Public setter for <see name="_ProgramString"/></value>
-    public void SetProgramString(string value) {
-      _ProgramString = value;
-    }
-
     /// <summary>
     /// Reads in all the keywords and adds them to <see name="keywords"/>
     /// </summary>
-    /// <returns>
-    /// A <c>char</c> that was extracted from the string or <c>null</c> if it
-    /// could not be converted
-    /// </returns>
     private void ReadKeywords(string keywordsFile) {
       using (StreamReader sr = new StreamReader(keywordsFile)) {
         while (!sr.EndOfStream) {
@@ -77,12 +60,11 @@ namespace SmallCLexicalAnalyzer {
     }
 
     /// <summary>
-    /// Gets the next token available from <see name="programStream"/>
+    /// Gets the next token available from <see name="ProgramString"/>
     /// </summary>
     /// <returns>
     /// Returns the next <c>Token</c> or <c>null</c> if there is no
-    /// valid next token
-    /// Recursively calls itself if a comment is found
+    /// valid next toke
     /// </returns>
     public Token? NextToken() {
       // stateMachine.States["0"] is the starting state
@@ -97,7 +79,7 @@ namespace SmallCLexicalAnalyzer {
           lexeme = "";
         }
 
-        nextChar = _ProgramString[0];
+        nextChar = ProgramString[0];
         nextState = state.GetDestination(nextChar);
 
         if (nextState == null && state.Accepting) {
@@ -106,7 +88,7 @@ namespace SmallCLexicalAnalyzer {
         else if (nextState != null) {
           lexeme = lexeme + nextChar;
           state = nextState;
-          _ProgramString = _ProgramString.Remove(0, 1);
+          ProgramString = ProgramString.Remove(0, 1);
         }
       }
 

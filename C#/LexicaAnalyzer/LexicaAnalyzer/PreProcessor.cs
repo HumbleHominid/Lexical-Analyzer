@@ -3,13 +3,31 @@ using System.Collections.Generic;
 using System.IO;
 
 namespace SmallCLexicalAnalyzer {
+  /// <summary>
+  /// The <c>PreProcessorResponse</c> struct
+  /// Contains following methods:
+  /// <list type="bullet">
+  /// <item>
+  /// <term>PreProcessorResponse</term>
+  /// <description>Initializes a new instance of the
+  /// <see cref="PreProcessorResponse(string, List<Token>, List<Token>)"/> token
+  /// </description>
+  /// </item>
+  /// </list>
+  /// </summary>
   public struct PreProcessorResponse {
+    /// <value>Public <c>string</c> representation of the program</value>
     public string Program { get; private set; }
 
+    /// <value>Public <c>List</c> of all the warning tokens</value>
     public List<Token> Warnings { get; private set; }
 
+    /// <value>Public <c>List</c> of all the error tokens</value>
     public List<Token> Errors { get; private set; }
 
+    /// <summary>
+    /// Constructor for a <c>PreProcessorResponse</c></value>
+    /// </summary>
     public PreProcessorResponse(string program,
         List<Token> warnings, List<Token>  errors) {
       Program = program;
@@ -18,25 +36,48 @@ namespace SmallCLexicalAnalyzer {
     }
   }
 
+  /// <summary>
+  /// A <c>PreProcessor</c> that uses a <c>StateMachine</c> to traverse a
+  /// DFA
+  /// <list type="bullet">
+  /// <term>PreProcessor</term>
+  /// <description>Initializes a new instance of the
+  /// <see cref="PreProcessorResponse(string)"/> class </description>
+  /// <term>Process</term>
+  /// <description>Processes the program</description>
+  /// <term>OpenProgram</term>
+  /// <description>Opens a new program</description>
+  /// <term>CloseProgram</term>
+  /// <description>Closes the currently open program</description>
+  /// </list>
+  /// </summary>
   class PreProcessor {
     /// <value>Private <c>StreamReader</c> of the currently open program.
     private StreamReader programStream = null;
 
-    /// <value>Private <c>Dictionary</c> that contains all the states</value>
-    private Dictionary<string, State> states = new Dictionary<string, State>();
-
+    /// <value>Private <c>StateMachine</c> used for the PreProcessor</value>
     private StateMachine stateMachine;
 
     /// <value>Public <c>bool</c> for if there is a token available.</value>
     public bool HasNextToken {
         get => programStream != null &&
                 !programStream.EndOfStream;
-        }
-
-    public PreProcessor(string stateTable) {
-      stateMachine = new StateMachine(stateTable);
     }
 
+    /// <summary>
+    /// Initializer for a <c>PreProcessor</c>
+    /// </summary>
+    /// <param name="tableFile">String of the table file to read</param>
+    public PreProcessor(string tableFile) {
+      stateMachine = new StateMachine(tableFile);
+    }
+
+    /// <summary>
+    /// Process the program
+    /// </summary>
+    /// <returns><see name="PreProcessorResponse"/> after processing has been
+    /// completed
+    /// </returns>
     public PreProcessorResponse Process() {
       string output = "";
       State startState = stateMachine.States["Start"];
@@ -67,6 +108,12 @@ namespace SmallCLexicalAnalyzer {
       return new PreProcessorResponse(output, warnings, errors);
     }
 
+    /// <summary>
+    /// Gets the next token available from <see name="programStream"/>
+    /// </summary>
+    /// <returns>
+    /// Returns the next <c>Token</c>
+    /// </returns>
     private Token NextToken() {
       State startState = stateMachine.States["Start"];
       State state = startState;

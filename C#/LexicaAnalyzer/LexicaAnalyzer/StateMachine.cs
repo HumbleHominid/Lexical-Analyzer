@@ -3,9 +3,27 @@ using System.Collections.Generic;
 using System.IO;
 
 namespace SmallCLexicalAnalyzer {
+
+  /// <summary>
+  /// The <c>StatMachine</c> class
+  /// Contains following methods:
+  /// <list type="bullet">
+  /// <item>
+  /// <term>StateMachine</term>
+  /// <description>Initializes a new instance of the
+  /// <see cref="StateMachine(string)"/> class</description>
+  /// </item>
+  /// </list>
+  /// </summary>
   class StateMachine {
+    /// <value>Public <c>Dictionary</c> that holds all of the states</value>
     public Dictionary<string, State> States { get; private set; } = new Dictionary<string, State>();
 
+    /// <summary>
+    /// Initializer for a <c>StateMacine</c> using
+    /// <paramref name="stateTableFile"/> where
+    /// </summary>
+    /// <param name="stateTableFile">File to open containing the state table</param>
     public StateMachine(string stateTableFile) {
       try {
         using (StreamReader sr = new StreamReader(stateTableFile)) {

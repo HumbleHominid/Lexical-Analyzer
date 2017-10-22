@@ -48,7 +48,7 @@ namespace SmallCLexicalAnalyzer {
             });
           }
 
-          LexAna.SetProgramString(res.Program);
+          LexAna.ProgramString = res.Program;
           RunAnalysis(LexAna);
         }
       }

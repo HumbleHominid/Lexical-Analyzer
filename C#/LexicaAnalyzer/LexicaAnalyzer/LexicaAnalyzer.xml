@@ -29,22 +29,10 @@
             <list type="bullet">
             <term>NextToken</term>
             <description>Gets the next token</description>
-            <term>OpenProgram</term>
-            <description>Opens a new program</description>
-            <term>CloseProgram</term>
-            <description>Closes the currently open program</description>
             </list>
             </summary>
-            <remarks>
-            The <c>LexicalAnalyzer</c> class makes use of the Singleton design pattern
-            so there will only ever be one instance of a <c>LexicalAnalyzer</c>. To
-            access the methods use the following:
-            <code>
-            LexicalAnalyzer lexicalAnalyzer = LexicalAnalyzer.Instance
-            </code>
-            </remarks>
         </member>
-        <member name="F:SmallCLexicalAnalyzer.LexicalAnalyzer._ProgramString">
+        <member name="P:SmallCLexicalAnalyzer.LexicalAnalyzer.ProgramString">
             <value>Private <c>string</c> of the program</value>
         </member>
         <member name="F:SmallCLexicalAnalyzer.LexicalAnalyzer.keywords">
@@ -59,9 +47,6 @@
             </summary>
             <param name="tableFile">String of the table file to read</param>
             <param name="keywordsFile">String of the keywords file to read</param>
-        </member>
-        <member name="M:SmallCLexicalAnalyzer.LexicalAnalyzer.SetProgramString(System.String)">
-            <value>Public setter for <see name="_ProgramString"/></value>
         </member>
         <member name="M:SmallCLexicalAnalyzer.LexicalAnalyzer.ReadKeywords(System.String)">
             <summary>
@@ -94,11 +79,33 @@
             <param name="name">The name of the token</param>
         </member>
         <!-- Badly formed XML comment ignored for member "F:SmallCLexicalAnalyzer.PreProcessor.programStream" -->
-        <member name="F:SmallCLexicalAnalyzer.PreProcessor.states">
-            <value>Private <c>Dictionary</c> that contains all the states</value>
+        <member name="F:SmallCLexicalAnalyzer.PreProcessor.stateMachine">
+            <value>Private <c>StateMachine</c> used for the PreProcessor</value>
         </member>
         <member name="P:SmallCLexicalAnalyzer.PreProcessor.HasNextToken">
             <value>Public <c>bool</c> for if there is a token available.</value>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.PreProcessor.#ctor(System.String)">
+            <summary>
+            Initializer for a <c>PreProcessor</c>
+            </summary>
+            <param name="tableFile">String of the table file to read</param>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.PreProcessor.Process">
+            <summary>
+            Process the program
+            </summary>
+            <returns><see name="PreProcessorResponse"/> after processing has been
+            completed
+            </returns>
+        </member>
+        <member name="M:SmallCLexicalAnalyzer.PreProcessor.NextToken">
+            <summary>
+            Gets the next token available from <see name="programStream"/>
+            </summary>
+            <returns>
+            Returns the next <c>Token</c>
+            </returns>
         </member>
         <member name="M:SmallCLexicalAnalyzer.PreProcessor.OpenProgram(System.String)">
             <summary>
