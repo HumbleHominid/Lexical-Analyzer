@@ -34,7 +34,7 @@ namespace SmallCLexicalAnalyzer {
   public class State {
 
     /// <value>A private dictionary that represents the state transition for
-    /// for this <c>State</c> with keys of type <c>char</c> and values of type4
+    /// for this <c>State</c> with keys of type <c>char</c> and values of type
     /// <c>State</c></value>
     private Dictionary<char, State> transition = new Dictionary<char, State>();
 

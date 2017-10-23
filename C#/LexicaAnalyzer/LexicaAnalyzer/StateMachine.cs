@@ -24,7 +24,8 @@ namespace SmallCLexicalAnalyzer {
     /// Initializer for a <c>StateMacine</c> using
     /// <paramref name="stateTableFile"/> where
     /// </summary>
-    /// <param name="stateTableFile">File to open containing the state table</param>
+    /// <param name="stateTableFile">File to open containing the state table
+    /// </param>
     public StateMachine(string stateTableFile) {
       try {
         using (StreamReader sr = new StreamReader(stateTableFile)) {

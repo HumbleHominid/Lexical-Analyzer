@@ -20,11 +20,13 @@ namespace SmallCLexicalAnalyzer {
     /// <value>Private <c>string</c> of the program</value>
     public string ProgramString { private get; set; }
 
-    /// <value>Private <c>Dictionary</c> of the keywords for the language</value>
+    /// <value>Private <c>Dictionary</c> of the keywords for the language
+    /// </value>
     private Dictionary<string, string> keywords =
         new Dictionary<string, string>();
 
-    /// <value>Private <c>StateMachine</c> for the <c>LexicalAnalyzer</c></value>
+    /// <value>Private <c>StateMachine</c> for the <c>LexicalAnalyzer</c>
+    /// </value>
     private StateMachine stateMachine;
 
     /// <value>Public <c>bool</c> for if there is a token available.</value>

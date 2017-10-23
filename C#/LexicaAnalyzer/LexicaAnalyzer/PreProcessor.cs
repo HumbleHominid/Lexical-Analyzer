@@ -11,8 +11,8 @@ namespace SmallCLexicalAnalyzer {
   /// <item>
   /// <term>PreProcessorResponse</term>
   /// <description>Initializes a new instance of the
-  /// <see cref="PreProcessorResponse(string, List{Token}, List{Token})"/> token
-  /// </description>
+  /// <see cref="PreProcessorResponse(string, List{Token}, List{Token})"/>
+  /// token</description>
   /// </item>
   /// </list>
   /// </summary>
@@ -64,7 +64,8 @@ namespace SmallCLexicalAnalyzer {
   /// </summary>
   class PreProcessor {
 
-    /// <value>Private <c>StreamReader</c> of the currently open program.</value>
+    /// <value>Private <c>StreamReader</c> of the currently open program.
+    /// </value>
     private StreamReader programStream = null;
 
     /// <value>Private <c>StateMachine</c> used for the PreProcessor</value>
