@@ -3,7 +3,10 @@
 namespace SmallCLexicalAnalyzer {
   class Program {
     static void Main(string[] args) {
-      LexicalAnalyzer lex = LexicalAnalyzer.Instance;
+      PreProcessor prePro = new PreProcessor("PreProcessor Table.csv");
+
+      LexicalAnalyzer lexAna = new LexicalAnalyzer("Lexical Analyzer Table.csv",
+                                                "Keyword Table.csv");
 
       bool runAnalysis = true;
 
@@ -22,10 +25,31 @@ namespace SmallCLexicalAnalyzer {
 
             break;
           }
-        } while (!lex.OpenProgram(programPath));
+        } while (!prePro.OpenProgram(programPath));
 
         if (runAnalysis) {
-          RunAnalysis();
+          PreProcessorResponse res = prePro.Process();
+
+          prePro.CloseProgram();
+
+          if (res.Warnings.Count > 0) {
+            Console.WriteLine("Warnings:");
+
+            res.Warnings.ForEach(delegate(Token token) {
+              Console.WriteLine($"Lexeme: {Conversions.ToLiteral(token.Lexeme),-15}Name: {token.Name,0}");
+            });
+          }
+
+          if (res.Errors.Count > 0) {
+            Console.WriteLine("Errors:");
+
+            res.Errors.ForEach(delegate(Token token) {
+              Console.WriteLine($"Lexeme: {Conversions.ToLiteral(token.Lexeme),-15}");
+            });
+          }
+
+          lexAna.ProgramString = res.Program;
+          RunAnalysis(lexAna);
         }
       }
     }
@@ -36,26 +60,25 @@ namespace SmallCLexicalAnalyzer {
     /// <returns>
     /// Void
     /// </returns>
-    private static void RunAnalysis() {
-      LexicalAnalyzer lex = LexicalAnalyzer.Instance;
-
-      Token? nextToken = null;
+    private static void RunAnalysis(LexicalAnalyzer lexAna) {
+      Token? nextToken;
       string userInput = "";
       bool continueAnalysis = true;
       bool rushAnalysis = false;
-
       Console.WriteLine("Starting analysis...");
 
-      while (lex.HasNextToken && continueAnalysis) {
-        nextToken = lex.NextToken();
+      while (lexAna.HasNextToken && continueAnalysis) {
+        nextToken = lexAna.NextToken();
 
         if (nextToken != null) {
           Token token = (Token)nextToken;
 
-          Console.WriteLine($"Lexeme: {token.Lexeme,-10}Name: {token.Name}");
-        }
-        else {
-          Console.WriteLine("Invalid token");
+          if (!token.Bad) {
+            Console.WriteLine($"Lexeme: {token.Lexeme,-10}Name: {token.Name}");
+          }
+          else {
+            Console.WriteLine("Invalid token");
+          }
         }
 
         userInput = rushAnalysis ? "" : Console.ReadLine();
@@ -79,8 +102,6 @@ namespace SmallCLexicalAnalyzer {
             break;
         }
       }
-
-      lex.CloseProgram();
     }
 
     /// <summary>
@@ -116,9 +137,9 @@ namespace SmallCLexicalAnalyzer {
       message = message + $"Lexical Analyzer Commands:\n";
       message = message + $"{'q',-5}Quit\n";
       message = message + $"{'r',-5}Read the rest of the analysis\n";
-      message = message + $"{'h',-5}Help with commands\n";
+      message = message + $"{'h',-5}Help with commands";
 
-      Console.Write(message);
+      Console.WriteLine(message);
     }
   }
 }
