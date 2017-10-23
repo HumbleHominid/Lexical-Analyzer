@@ -10,12 +10,12 @@ namespace SmallCLexicalAnalyzer {
   /// <item>
   /// <term>State</term>
   /// <description>Initializes a new instance of the
-  /// <see cref="State()"/> class</description>
+  /// <see cref="State(string)"/> class</description>
   /// </item>
   /// <item>
   /// <term>State</term>
   /// <description>Initializes a new instance of the
-  /// <see cref="State(string)"/> class</description>
+  /// <see cref="State(string, string)"/> class</description>
   /// </item>
   /// <item>
   /// <term>AddToDictionary</term>
@@ -67,6 +67,7 @@ namespace SmallCLexicalAnalyzer {
     /// <remarks>
     /// Sets <see name="AcceptedName"/> to <paramref name="acceptedName"/>
     /// </remarks>
+    /// <param name="name">A <c>string</c></param>
     /// <param name="acceptedName">A <c>string</c></param>
     public State(string name, string acceptedName) {
       Name = name;

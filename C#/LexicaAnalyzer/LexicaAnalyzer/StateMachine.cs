@@ -16,6 +16,7 @@ namespace SmallCLexicalAnalyzer {
   /// </list>
   /// </summary>
   class StateMachine {
+
     /// <value>Public <c>Dictionary</c> that holds all of the states</value>
     public Dictionary<string, State> States { get; private set; } = new Dictionary<string, State>();
 

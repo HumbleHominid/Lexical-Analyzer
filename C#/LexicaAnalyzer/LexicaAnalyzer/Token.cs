@@ -4,14 +4,12 @@
   /// The <c>Token</c> struct
   /// Contains following methods:
   /// <list type="bullet">
-  /// <item>
   /// <term>Token</term>
   /// <description>Constructs a new instance of the
   /// <see cref="Token(string)"/> class</description>
-  /// <term>Token/term>
+  /// <term>Token</term>
   /// <description>Constructs a new instance of the
   /// <see cref="Token(string, string)"/> class</description>
-  /// </item>
   /// </list>
   /// </summary>
   public struct Token {

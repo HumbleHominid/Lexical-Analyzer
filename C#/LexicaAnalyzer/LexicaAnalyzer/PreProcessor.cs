@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 
 namespace SmallCLexicalAnalyzer {
+
   /// <summary>
   /// The <c>PreProcessorResponse</c> struct
   /// Contains following methods:
@@ -10,12 +11,16 @@ namespace SmallCLexicalAnalyzer {
   /// <item>
   /// <term>PreProcessorResponse</term>
   /// <description>Initializes a new instance of the
-  /// <see cref="PreProcessorResponse(string, List<Token>, List<Token>)"/> token
+  /// <see cref="PreProcessorResponse(string, List{Token}, List{Token})"/> token
   /// </description>
   /// </item>
   /// </list>
   /// </summary>
+  /// <remarks>
+  /// This is what the <c>PreProcessor</c> returns when it is done processing
+  /// </remarks>
   public struct PreProcessorResponse {
+
     /// <value>Public <c>string</c> representation of the program</value>
     public string Program { get; private set; }
 
@@ -26,10 +31,16 @@ namespace SmallCLexicalAnalyzer {
     public List<Token> Errors { get; private set; }
 
     /// <summary>
-    /// Constructor for a <c>PreProcessorResponse</c></value>
+    /// Constructor for a <c>PreProcessorResponse</c>
     /// </summary>
-    public PreProcessorResponse(string program,
-        List<Token> warnings, List<Token>  errors) {
+    /// <param name="program">A <c>string</c> representation of the
+    /// program</param>
+    /// <param name="warnings">A <c>List</c> of all the warnings the
+    /// preprocessor found</param>
+    /// <param name="errors">A <c>List</c> of all the errors the
+    /// preprocessor found</param>
+    public PreProcessorResponse (string program, List<Token> warnings,
+        List<Token>  errors) {
       Program = program;
       Warnings = warnings;
       Errors = errors;
@@ -42,7 +53,7 @@ namespace SmallCLexicalAnalyzer {
   /// <list type="bullet">
   /// <term>PreProcessor</term>
   /// <description>Initializes a new instance of the
-  /// <see cref="PreProcessorResponse(string)"/> class </description>
+  /// <see cref="PreProcessor(string)"/> class </description>
   /// <term>Process</term>
   /// <description>Processes the program</description>
   /// <term>OpenProgram</term>
@@ -52,7 +63,8 @@ namespace SmallCLexicalAnalyzer {
   /// </list>
   /// </summary>
   class PreProcessor {
-    /// <value>Private <c>StreamReader</c> of the currently open program.
+
+    /// <value>Private <c>StreamReader</c> of the currently open program.</value>
     private StreamReader programStream = null;
 
     /// <value>Private <c>StateMachine</c> used for the PreProcessor</value>

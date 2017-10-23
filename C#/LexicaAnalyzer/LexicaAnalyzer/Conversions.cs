@@ -8,17 +8,15 @@ namespace SmallCLexicalAnalyzer {
   /// <summary>
   /// Static conversion class
   /// <list type="bullet">
-  /// <item>
   /// <term>HexTokenToChar</term>
   /// <description>Converts a single hex string, e.g. `0x20` into its
   /// equivalent value as a character</description>
-  /// <term>ToLiteral/term>
+  /// <term>ToLiteral</term>
   /// <description>Converts the string into the escaped string literal
-  //// representation</description>
-  /// </item>
+  /// representation</description>
   /// </list>
   /// </summary>
-  public static class Conversions {
+  static class Conversions {
 
     /// <summary>
     /// Converts a hex code in a given string into a character

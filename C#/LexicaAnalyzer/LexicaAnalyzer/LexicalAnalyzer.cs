@@ -10,7 +10,7 @@ namespace SmallCLexicalAnalyzer {
   /// <list type="bullet">
   /// <term>LexicalAnlyzer</term>
   /// <description>Initializes a new instance of the
-  /// <see cref="LexicalAnalyzer(string, string"/></description>
+  /// <see cref="LexicalAnalyzer(string, string)"/></description>
   /// <term>NextToken</term>
   /// <description>Gets the next token</description>
   /// </list>
@@ -29,8 +29,8 @@ namespace SmallCLexicalAnalyzer {
 
     /// <value>Public <c>bool</c> for if there is a token available.</value>
     public bool HasNextToken {
-          get => (ProgramString.Length > 0);
-        }
+        get => (ProgramString.Length > 0);
+    }
 
     /// <summary>
     /// Initializer for a <c>LexicalAnalyzer</c>
@@ -67,6 +67,7 @@ namespace SmallCLexicalAnalyzer {
     /// valid next toke
     /// </returns>
     public Token? NextToken() {
+
       // stateMachine.States["0"] is the starting state
       State startState = stateMachine.States["0"];
       State state = startState;
