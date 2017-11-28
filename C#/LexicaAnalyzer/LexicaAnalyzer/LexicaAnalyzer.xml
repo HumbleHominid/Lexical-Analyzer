@@ -52,10 +52,12 @@
             <value>Private <c>string</c> of the program</value>
         </member>
         <member name="F:SmallCLexicalAnalyzer.LexicalAnalyzer.keywords">
-            <value>Private <c>Dictionary</c> of the keywords for the language</value>
+            <value>Private <c>Dictionary</c> of the keywords for the language
+            </value>
         </member>
         <member name="F:SmallCLexicalAnalyzer.LexicalAnalyzer.stateMachine">
-            <value>Private <c>StateMachine</c> for the <c>LexicalAnalyzer</c></value>
+            <value>Private <c>StateMachine</c> for the <c>LexicalAnalyzer</c>
+            </value>
         </member>
         <member name="P:SmallCLexicalAnalyzer.LexicalAnalyzer.HasNextToken">
             <value>Public <c>bool</c> for if there is a token available.</value>
@@ -100,8 +102,8 @@
             <item>
             <term>PreProcessorResponse</term>
             <description>Initializes a new instance of the
-            <see cref="M:SmallCLexicalAnalyzer.PreProcessorResponse.#ctor(System.String,System.Collections.Generic.List{SmallCLexicalAnalyzer.Token},System.Collections.Generic.List{SmallCLexicalAnalyzer.Token})"/> token
-            </description>
+            <see cref="M:SmallCLexicalAnalyzer.PreProcessorResponse.#ctor(System.String,System.Collections.Generic.List{SmallCLexicalAnalyzer.Token},System.Collections.Generic.List{SmallCLexicalAnalyzer.Token})"/>
+            token </description>
             </item>
             </list>
             </summary>
@@ -147,7 +149,8 @@
             </summary>
         </member>
         <member name="F:SmallCLexicalAnalyzer.PreProcessor.programStream">
-            <value>Private <c>StreamReader</c> of the currently open program.</value>
+            <value>Private <c>StreamReader</c> of the currently open program.
+            </value>
         </member>
         <member name="F:SmallCLexicalAnalyzer.PreProcessor.stateMachine">
             <value>Private <c>StateMachine</c> used for the PreProcessor</value>
@@ -252,7 +255,7 @@
         </member>
         <member name="F:SmallCLexicalAnalyzer.State.transition">
             <value>A private dictionary that represents the state transition for
-            for this <c>State</c> with keys of type <c>char</c> and values of type4
+            for this <c>State</c> with keys of type <c>char</c> and values of type
             <c>State</c></value>
         </member>
         <member name="P:SmallCLexicalAnalyzer.State.AcceptedName">
@@ -326,7 +329,8 @@
             Initializer for a <c>StateMacine</c> using
             <paramref name="stateTableFile"/> where
             </summary>
-            <param name="stateTableFile">File to open containing the state table</param>
+            <param name="stateTableFile">File to open containing the state table
+            </param>
         </member>
         <member name="M:SmallCLexicalAnalyzer.StateMachine.CreateStates(System.Collections.Generic.Dictionary{System.String,System.String[]})">
             <summary>

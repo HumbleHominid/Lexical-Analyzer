@@ -12,7 +12,7 @@ namespace SmallCLexicalAnalyzer {
   /// <term>PreProcessorResponse</term>
   /// <description>Initializes a new instance of the
   /// <see cref="PreProcessorResponse(string, List{Token}, List{Token})"/>
-  /// token</description>
+  /// token </description>
   /// </item>
   /// </list>
   /// </summary>

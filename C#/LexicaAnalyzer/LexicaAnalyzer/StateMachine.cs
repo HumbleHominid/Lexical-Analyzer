@@ -60,8 +60,8 @@ namespace SmallCLexicalAnalyzer {
 
         if (entry.Value[0] != "Valid Chars") {
           State state = entry.Value[1] == "" ?
-                        new State(key) :
-                        new State(key, entry.Value[1]);
+              new State(key) :
+              new State(key, entry.Value[1]);
 
           States.Add(key, state);
         }

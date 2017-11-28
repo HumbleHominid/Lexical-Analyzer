@@ -3,7 +3,7 @@
 namespace SmallCLexicalAnalyzer {
   class Program {
     static void Main(string[] args) {
-      LexicalAnalyzer LexAna = new LexicalAnalyzer("Lexical Analyzer Table.csv",
+      LexicalAnalyzer lexAna = new LexicalAnalyzer("Lexical Analyzer Table.csv",
                                                 "Keyword Table.csv");
 
       PreProcessor prePro = new PreProcessor("PreProcessor Table.csv");
@@ -32,6 +32,8 @@ namespace SmallCLexicalAnalyzer {
 
           prePro.CloseProgram();
 
+          Console.WriteLine("Pre-processor response:");
+
           if (res.Warnings.Count > 0) {
             Console.WriteLine("Warnings:");
 
@@ -48,8 +50,8 @@ namespace SmallCLexicalAnalyzer {
             });
           }
 
-          LexAna.ProgramString = res.Program;
-          RunAnalysis(LexAna);
+          lexAna.ProgramString = res.Program;
+          RunAnalysis(lexAna);
         }
       }
     }
@@ -60,15 +62,15 @@ namespace SmallCLexicalAnalyzer {
     /// <returns>
     /// Void
     /// </returns>
-    private static void RunAnalysis(LexicalAnalyzer LexAna) {
+    private static void RunAnalysis(LexicalAnalyzer lexAna) {
       Token? nextToken;
       string userInput = "";
       bool continueAnalysis = true;
       bool rushAnalysis = false;
       Console.WriteLine("Starting analysis...");
 
-      while (LexAna.HasNextToken && continueAnalysis) {
-        nextToken = LexAna.NextToken();
+      while (lexAna.HasNextToken && continueAnalysis) {
+        nextToken = lexAna.NextToken();
 
         if (nextToken != null) {
           Token token = (Token)nextToken;
