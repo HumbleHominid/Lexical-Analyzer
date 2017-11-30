@@ -2,10 +2,10 @@
 	(require racket/format)
 
 	(provide parse-csv)
-	
+
 	; dfa format `( current-state transition-function )
 	; *Note* Final states are defined as a state with no transitions
-	; `(0 
+	; `(0
 	;	(
 	;		[(cur-state char) dest-state]
 	;			transitions for state 0
@@ -21,34 +21,29 @@
 	; Recursively calls itself on file open failure
 	; Makes the dfa if it can open the file
 	(define parse-csv
-		(lambda ()
-			(let [(path (_get-source-file))]
-				(if (file-exists? path)
-					(call-with-input-file path (lambda (in) (_make-dfa in)))		
-					(begin
-						(display "Invalid path to file")
-						(parse-csv)
-					)
-				)
+		(lambda (path)
+			(if (file-exists? path)
+				(call-with-input-file path (lambda (in) (make-dfa in)))
+				(display "Invalid path to file")
 			)
 		)
 	)
 
 	; Gets the next column in a csv string
-	(define _next-column
+	(define next-column
 	  	(lambda (in)
 		  	; `let*` binds the vars syncronously
 		  	(let* [(raw-char (read-char in)) (pretty-char (~a raw-char))]
-			  	(cond 
+			  	(cond
 					[(eof-object? raw-char) raw-char]
 					[(string=? pretty-char ",") ""]
 					[(non-empty-string? pretty-char)
-							(let [(next (_next-column in))]
-								(if (eof-object? next)
-									pretty-char
-									(string-append pretty-char next)
-								)
+						(let [(next (next-column in))]
+							(if (eof-object? next)
+								pretty-char
+								(string-append pretty-char next)
 							)
+						)
 					]
 					[else ""]
 				)
@@ -56,41 +51,40 @@
 		)
 	)
 
-	(define _make-dfa
+	(define make-dfa
 		(lambda (in)
-			; Make indexed list of chars
 			(let* [(stream (open-input-string (read-line in `return-linefeed)))
-			 		(dump1 (_next-column stream))
-					(dump2 (_next-column stream))
-					(headers (_csv-to-list stream))]
-				(cons 0 (list (_make-transition-map in headers)))
+			 		(dump1 (next-column stream))
+					(dump2 (next-column stream))
+					(headers (csv->list stream))]
+				(cons 0 (list (make-transition-map in headers)))
 			)
 		)
 	)
 
-	(define _csv-to-list
+	(define csv->list
 		(lambda (in)
-			(let [(next (_next-column in))]
+			(let [(next (next-column in))]
 				(if (non-empty-string? next)
-					(cons next (_csv-to-list in))
+					(cons next (csv->list in))
 					`()
 				)
 			)
 		)
 	)
 
-	(define _make-transition-map
+	(define make-transition-map
 		(lambda (in headers)
 			(let [(next (read-line in `return-linefeed))]
 				(if (eof-object? next)
 					`()
 				  	(let* [(stream (open-input-string next))
-							(state (_next-column stream))
-							(name (_next-column stream))]
-						(let [(row (_make-row stream state 0 headers))]
+							(state (next-column stream))
+							(name (next-column stream))]
+						(let [(row (make-row stream state 0 headers))]
 							(if (empty? row)
-								(_make-transition-map in headers)
-								(cons row (_make-transition-map in headers))
+								(make-transition-map in headers)
+								(cons row (make-transition-map in headers))
 							)
 						)
 					)
@@ -99,22 +93,22 @@
 		)
 	)
 
-	; Recieves next-line as a port
-	(define _make-row
+	; Receives next-line as a port
+	(define make-row
 		(lambda (in state index headers)
-			(let [(next-column (_next-column in))]
+			(let [(next-column (next-column in))]
 			  (cond
 					[(eof-object? next-column) `()]
-				  	[(string=? "" next-column) (_make-row in state (+ index 1) headers)]
-					[else (cons (list (list (string->number state) (list-ref headers index))
-							(string->number next-column))
-							(_make-row in state (+ index 1) headers))]
+				  [(string=? "" next-column) (make-row in state (+ index 1) headers)]
+					[else (cons (list (list (string->number state) (list-ref headers
+							index)) (string->number next-column)) (make-row in state
+							(+ index 1) headers))]
 				)
 			)
 		)
 	)
 
-	(define _get-source-file 
+	(define get-source-file
 		(lambda ()
 	  		(begin
 				(display "Give csv file> ")

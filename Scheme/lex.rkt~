@@ -1,0 +1,9 @@
+(module lex racket
+	(require "csv.rkt")
+
+	(provide analyze)
+
+	(define analyze
+		(lambda (filename) (parse-csv filename))
+	)
+)
